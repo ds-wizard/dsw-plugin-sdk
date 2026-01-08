@@ -1,27 +1,35 @@
+import { ProjectQuestionActionComponent } from 'src/elements'
+import { ProjectTabComponent } from 'src/elements/project-tab-element'
+
 import { DocumentActionComponent } from '../elements/document-action-element'
 import { ProjectActionComponent } from '../elements/project-action-element'
 import { SettingsComponent } from '../elements/settings-element'
 import { UserSettingsComponent } from '../elements/user-settings-element'
 import {
-    ActionConnector,
-    ActionWithIconConnector,
     Connectors,
+    DocumentActionConnector,
     Plugin,
     PluginMetadata,
-    SimpleElementConnector,
+    ProjectActionConnector,
+    ProjectQuestionActionConnector,
+    ProjectQuestionActionConnectorType,
+    ProjectTabConnector,
+    SettingsConnector,
 } from '../types'
 import { JsonCodec, makeNullCodec } from '../utils/json'
-import { ElementFactory } from './element-factory'
 import { PluginApiVersion } from '../version'
+import { ElementFactory } from './element-factory'
 
 export class PluginBuilder<S, U> {
     protected metadata: PluginMetadata
     protected elementFactory: ElementFactory<S, U>
 
-    protected documentActions?: ActionWithIconConnector[]
-    protected projectActions?: ActionConnector[]
-    protected settings?: SimpleElementConnector
-    protected userSettings?: SimpleElementConnector
+    protected documentActions?: DocumentActionConnector[]
+    protected projectActions?: ProjectActionConnector[]
+    protected projectQuestionActions?: ProjectQuestionActionConnector[]
+    protected projectTabs?: ProjectTabConnector[]
+    protected settings?: SettingsConnector
+    protected userSettings?: SettingsConnector
 
     static create<S, U>(
         metadata: PluginMetadata,
@@ -49,13 +57,18 @@ export class PluginBuilder<S, U> {
         name: string,
         element: string,
         component: DocumentActionComponent<S, U>,
+        dtPatterns: string[] | null = null,
+        dtFormats: string[] | null = null,
     ): PluginBuilder<S, U> {
         if (!this.documentActions) {
             this.documentActions = []
         }
+
         this.documentActions.push({
             action: { icon, name },
             element,
+            dtPatterns,
+            dtFormats,
         })
 
         const documentActionElement = this.elementFactory.createDocumentActionElement(component)
@@ -68,17 +81,71 @@ export class PluginBuilder<S, U> {
         name: string,
         element: string,
         component: ProjectActionComponent<S, U>,
+        kmPatterns: string[] | null = null,
     ): PluginBuilder<S, U> {
         if (!this.projectActions) {
             this.projectActions = []
         }
+
         this.projectActions.push({
             name,
             element,
+            kmPatterns,
         })
 
         const projectActionElement = this.elementFactory.createProjectActionElement(component)
         customElements.define(element, projectActionElement)
+
+        return this
+    }
+
+    addProjectQuestionAction(
+        icon: string,
+        name: string,
+        type: ProjectQuestionActionConnectorType,
+        element: string,
+        component: ProjectQuestionActionComponent<S, U>,
+        kmPatterns: string[] | null = null,
+    ): PluginBuilder<S, U> {
+        if (!this.projectQuestionActions) {
+            this.projectQuestionActions = []
+        }
+
+        this.projectQuestionActions.push({
+            action: { icon, name },
+            type,
+            element,
+            kmPatterns,
+        })
+
+        const projectQuestionActionElement =
+            this.elementFactory.createProjectQuestionActionElement(component)
+        customElements.define(element, projectQuestionActionElement)
+
+        return this
+    }
+
+    addProjectTab(
+        icon: string,
+        name: string,
+        url: string,
+        element: string,
+        component: ProjectTabComponent<S, U>,
+        kmPatterns: string[] | null = null,
+    ): PluginBuilder<S, U> {
+        if (!this.projectTabs) {
+            this.projectTabs = []
+        }
+
+        this.projectTabs.push({
+            tab: { icon, name },
+            url,
+            element,
+            kmPatterns,
+        })
+
+        const projectTabElement = this.elementFactory.createProjectTabElement(component)
+        customElements.define(element, projectTabElement)
 
         return this
     }
@@ -117,6 +184,9 @@ export class PluginBuilder<S, U> {
 
         if (this.documentActions) connectors.documentActions = this.documentActions
         if (this.projectActions) connectors.projectActions = this.projectActions
+        if (this.projectQuestionActions)
+            connectors.projectQuestionActions = this.projectQuestionActions
+        if (this.projectTabs) connectors.projectTabs = this.projectTabs
         if (this.settings) connectors.settings = this.settings
         if (this.userSettings) connectors.userSettings = this.userSettings
 

@@ -23,27 +23,48 @@ export type PluginManifest = {
 }
 
 export type Connectors = {
-    documentActions?: ActionWithIconConnector[]
-    projectActions?: ActionConnector[]
-    settings?: SimpleElementConnector
-    userSettings?: SimpleElementConnector
-}
-
-export type SimpleElementConnector = {
-    element: string
-}
-
-export type ActionConnector = {
-    name: string
-    element: string
-}
-
-export type ActionWithIconConnector = {
-    action: ActionWithIcon
-    element: string
+    documentActions?: DocumentActionConnector[]
+    projectActions?: ProjectActionConnector[]
+    projectQuestionActions?: ProjectQuestionActionConnector[]
+    projectTabs?: ProjectTabConnector[]
+    settings?: SettingsConnector
+    userSettings?: SettingsConnector
 }
 
 export type ActionWithIcon = {
     icon: string
     name: string
+}
+
+export type DocumentActionConnector = {
+    action: ActionWithIcon
+    element: string
+    dtPatterns: string[] | null
+    dtFormats: string[] | null
+}
+
+export type ProjectActionConnector = {
+    name: string
+    element: string
+    kmPatterns: string[] | null
+}
+
+export type ProjectQuestionActionConnector = {
+    action: ActionWithIcon
+    type: ProjectQuestionActionConnectorType
+    element: string
+    kmPatterns: string[] | null
+}
+
+export type ProjectQuestionActionConnectorType = 'modal' | 'sidebar'
+
+export type ProjectTabConnector = {
+    tab: ActionWithIcon
+    url: string
+    element: string
+    kmPatterns: string[] | null
+}
+
+export type SettingsConnector = {
+    element: string
 }

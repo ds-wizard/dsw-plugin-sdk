@@ -1,6 +1,8 @@
 export const ATTR = {
     documentValue: 'document-value',
     projectValue: 'project-value',
+    questionPathValue: 'question-path-value',
+    questionValue: 'question-value',
     settingsValue: 'settings-value',
     userSettingsValue: 'user-settings-value',
 } as const

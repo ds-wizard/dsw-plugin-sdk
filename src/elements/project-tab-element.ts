@@ -1,23 +1,22 @@
 import React from 'react'
 
 import { ProjectData, ProjectDataCodec } from '../data/project-common-data'
-import { ATTR, EVT } from '../protocol'
+import { ATTR } from '../protocol'
 import { BaseElement } from './base-element'
 
-export type ProjectActionComponentProps<S, U> = {
+export type ProjectTabComponentProps<S, U> = {
     settings: S
     userSettings: U
     project: ProjectData | null
-    onActionClose: () => void
 }
 
-export type ProjectActionComponent<S, U> = React.ComponentType<ProjectActionComponentProps<S, U>>
+export type ProjectTabComponent<S, U> = React.ComponentType<ProjectTabComponentProps<S, U>>
 
-export abstract class ProjectActionElement<S, U> extends BaseElement<S, U> {
-    protected Component: ProjectActionComponent<S, U> | null = null
+export abstract class ProjectTabElement<S, U> extends BaseElement<S, U> {
+    protected Component: ProjectTabComponent<S, U> | null = null
     protected project: ProjectData | null = null
 
-    abstract getReactComponent(): ProjectActionComponent<S, U>
+    abstract getReactComponent(): ProjectTabComponent<S, U>
 
     static get observedAttributes(): string[] {
         return [...super.observedAttributes, ATTR.projectValue]
@@ -34,11 +33,11 @@ export abstract class ProjectActionElement<S, U> extends BaseElement<S, U> {
         const raw = this.getAttribute(ATTR.projectValue)
         if (!raw || !raw.trim()) return
 
-        const decoded = this.decodeDocument(raw)
+        const decoded = this.decodeProject(raw)
         if (decoded !== null) this.project = decoded
     }
 
-    protected decodeDocument(raw: string): ProjectData | null {
+    protected decodeProject(raw: string): ProjectData | null {
         const result = ProjectDataCodec.decode(raw)
         return result.ok ? result.value : null
     }
@@ -53,9 +52,6 @@ export abstract class ProjectActionElement<S, U> extends BaseElement<S, U> {
                 settings: this.settings,
                 userSettings: this.userSettings,
                 project: this.project,
-                onActionClose: () => {
-                    this.emitEmpty(EVT.actionClose)
-                },
             }),
         )
     }

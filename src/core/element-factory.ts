@@ -1,13 +1,22 @@
-import { SettingsComponent, SettingsElement } from '../elements/settings-element'
-import { JsonCodec } from '../utils/json'
-import { UserSettingsComponent, UserSettingsElement } from '../elements/user-settings-element'
+import { ProjectQuestionActionComponent, ProjectQuestionActionElement } from 'src/elements'
+import { ProjectTabComponent, ProjectTabElement } from 'src/elements/project-tab-element'
+
 import { DocumentActionComponent, DocumentActionElement } from '../elements/document-action-element'
 import { ProjectActionComponent, ProjectActionElement } from '../elements/project-action-element'
+import { SettingsComponent, SettingsElement } from '../elements/settings-element'
+import { UserSettingsComponent, UserSettingsElement } from '../elements/user-settings-element'
+import { JsonCodec } from '../utils/json'
 
-export type DocumentActionElementClass<S, U> = new (...args: any[]) => DocumentActionElement<S, U>
-export type ProjectActionElementClass<S, U> = new (...args: any[]) => ProjectActionElement<S, U>
-export type SettingsElementClass<S> = new (...args: any[]) => SettingsElement<S>
-export type UserSettingsElementClass<S, U> = new (...args: any[]) => UserSettingsElement<S, U>
+export type DocumentActionElementClass<S, U> = new (
+    ...args: unknown[]
+) => DocumentActionElement<S, U>
+export type ProjectActionElementClass<S, U> = new (...args: unknown[]) => ProjectActionElement<S, U>
+export type ProjectQuestionActionElementClass<S, U> = new (
+    ...args: unknown[]
+) => ProjectQuestionActionElement<S, U>
+export type ProjectTabElementClass<S, U> = new (...args: unknown[]) => ProjectTabElement<S, U>
+export type SettingsElementClass<S> = new (...args: unknown[]) => SettingsElement<S>
+export type UserSettingsElementClass<S, U> = new (...args: unknown[]) => UserSettingsElement<S, U>
 
 export class ElementFactory<S, U> {
     protected settingsDataCodec: JsonCodec<S>
@@ -60,6 +69,47 @@ export class ElementFactory<S, U> {
         }
     }
 
+    createProjectQuestionActionElement(
+        projectQuestionActionComponent: ProjectQuestionActionComponent<S, U>,
+    ): ProjectQuestionActionElementClass<S, U> {
+        const settingsDataCodec = this.settingsDataCodec
+        const userSettingsDataCodec = this.userSettingsDataCodec
+
+        return class extends ProjectQuestionActionElement<S, U> {
+            getSettingsDataCodec(): JsonCodec<S> {
+                return settingsDataCodec
+            }
+
+            getUserSettingsDataCodec(): JsonCodec<U> {
+                return userSettingsDataCodec
+            }
+
+            getReactComponent(): ProjectQuestionActionComponent<S, U> {
+                return projectQuestionActionComponent
+            }
+        }
+    }
+
+    createProjectTabElement(
+        projectTabComponent: ProjectTabComponent<S, U>,
+    ): ProjectTabElementClass<S, U> {
+        const settingsDataCodec = this.settingsDataCodec
+        const userSettingsDataCodec = this.userSettingsDataCodec
+
+        return class extends ProjectTabElement<S, U> {
+            getSettingsDataCodec(): JsonCodec<S> {
+                return settingsDataCodec
+            }
+
+            getUserSettingsDataCodec(): JsonCodec<U> {
+                return userSettingsDataCodec
+            }
+
+            getReactComponent(): ProjectTabComponent<S, U> {
+                return projectTabComponent
+            }
+        }
+    }
     createSettingsElement(settingsComponent: SettingsComponent<S>): SettingsElementClass<S> {
         const settingsDataCodec = this.settingsDataCodec
 

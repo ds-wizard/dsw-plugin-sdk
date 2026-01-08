@@ -4,6 +4,7 @@ export type DecodeResult<T> = { ok: true; value: T } | { ok: false; error: strin
 
 export type JsonCodec<T> = {
     init: () => T
+    parseOrInit: (input: unknown) => T
     decode: (raw: string) => DecodeResult<T>
     encode: (data: T) => string
 }
@@ -20,6 +21,11 @@ export function makeJsonCodec<T extends z.ZodTypeAny>(
     return {
         init(): z.infer<T> {
             return defaultData
+        },
+
+        parseOrInit(input: unknown): z.infer<T> {
+            const res = schema.safeParse(input)
+            return res.success ? res.data : defaultData
         },
 
         decode(raw: string): DecodeResult<z.infer<T>> {
@@ -44,6 +50,10 @@ export function makeJsonCodec<T extends z.ZodTypeAny>(
 export function makeNullCodec(): JsonCodec<null> {
     return {
         init(): null {
+            return null
+        },
+
+        parseOrInit(_input: unknown): null {
             return null
         },
 
