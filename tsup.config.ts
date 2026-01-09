@@ -10,6 +10,7 @@ export default defineConfig({
         'src/types.ts',
         'src/protocol.ts',
         'src/version.ts',
+        'src/vite/index.ts',
     ],
     format: ['esm'],
     dts: true,

@@ -6,7 +6,7 @@
     "repository": {
         "url": "https://github.com/ds-wizard/dsw-plugin-sdk"
     },
-    "version": "0.1.1",
+    "version": "0.2.0",
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
@@ -47,6 +47,10 @@
         "./version": {
             "types": "./dist/version.d.ts",
             "import": "./dist/version.js"
+        },
+        "./vite": {
+            "types": "./dist/vite.d.ts",
+            "import": "./dist/vite/index.js"
         }
     },
     "files": [
