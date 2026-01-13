@@ -1,5 +1,6 @@
 export const ATTR = {
     documentValue: 'document-value',
+    knowledgeModelValue: 'knowledge-model-value',
     projectValue: 'project-value',
     questionPathValue: 'question-path-value',
     questionValue: 'question-value',
@@ -9,6 +10,7 @@ export const ATTR = {
 
 export const EVT = {
     actionClose: 'action-close',
+    import: 'import',
     settingsValueChange: 'settings-value-change',
     userSettingsValueChange: 'user-settings-value-change',
 } as const

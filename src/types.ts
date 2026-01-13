@@ -25,6 +25,7 @@ export type PluginManifest = {
 export type Connectors = {
     documentActions?: DocumentActionConnector[]
     projectActions?: ProjectActionConnector[]
+    projectImporters?: ProjectImporterConnector[]
     projectQuestionActions?: ProjectQuestionActionConnector[]
     projectTabs?: ProjectTabConnector[]
     settings?: SettingsConnector
@@ -41,6 +42,13 @@ export type DocumentActionConnector = {
     element: string
     dtPatterns: string[] | null
     dtFormats: string[] | null
+}
+
+export type ProjectImporterConnector = {
+    name: string
+    url: string
+    element: string
+    kmPatterns: string[] | null
 }
 
 export type ProjectActionConnector = {

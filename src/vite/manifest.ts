@@ -1,5 +1,5 @@
-import { PluginMetadata } from 'src/types'
-import { PluginApiVersion } from 'src/version'
+import { PluginMetadata } from '../types'
+import { PluginApiVersion } from '../version'
 
 export function emitManifestPlugin(pluginMetadata: PluginMetadata) {
     return {

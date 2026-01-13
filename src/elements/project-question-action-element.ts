@@ -1,7 +1,7 @@
 import React from 'react'
-import { QuestionData, QuestionDataCodec } from 'src/data/question-data'
 
 import { ProjectData, ProjectDataCodec } from '../data/project-common-data'
+import { QuestionData, QuestionDataCodec } from '../data/question-data'
 import { ATTR, EVT } from '../protocol'
 import { BaseElement } from './base-element'
 

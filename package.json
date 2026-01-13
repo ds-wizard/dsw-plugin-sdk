@@ -6,7 +6,7 @@
     "repository": {
         "url": "https://github.com/ds-wizard/dsw-plugin-sdk"
     },
-    "version": "0.2.0",
+    "version": "0.3.0",
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
@@ -32,6 +32,10 @@
         "./data": {
             "types": "./dist/data/index.d.ts",
             "import": "./dist/data/index.js"
+        },
+        "./project-importer": {
+            "types": "./dist/project-importer/index.d.ts",
+            "import": "./dist/project-importer/index.js"
         },
         "./utils": {
             "types": "./dist/utils/index.d.ts",
@@ -69,12 +73,16 @@
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "globals": "^16.5.0",
         "prettier": "^3.7.4",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
         "tsup": "^8.5.1",
         "typescript": "^5.9.3"
     },
+    "peerDependencies": {
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0"
+    },
     "dependencies": {
-        "react": "^19.2.3",
-        "react-dom": "^19.2.3",
         "zod": "^4.2.1"
     }
 }

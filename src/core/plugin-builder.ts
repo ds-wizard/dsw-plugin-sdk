@@ -1,8 +1,8 @@
-import { ProjectQuestionActionComponent } from 'src/elements'
-import { ProjectTabComponent } from 'src/elements/project-tab-element'
-
+import { ProjectQuestionActionComponent } from '../elements'
 import { DocumentActionComponent } from '../elements/document-action-element'
 import { ProjectActionComponent } from '../elements/project-action-element'
+import { ProjectImporterComponent } from '../elements/project-importer-element'
+import { ProjectTabComponent } from '../elements/project-tab-element'
 import { SettingsComponent } from '../elements/settings-element'
 import { UserSettingsComponent } from '../elements/user-settings-element'
 import {
@@ -11,6 +11,7 @@ import {
     Plugin,
     PluginMetadata,
     ProjectActionConnector,
+    ProjectImporterConnector,
     ProjectQuestionActionConnector,
     ProjectQuestionActionConnectorType,
     ProjectTabConnector,
@@ -26,6 +27,7 @@ export class PluginBuilder<S, U> {
 
     protected documentActions?: DocumentActionConnector[]
     protected projectActions?: ProjectActionConnector[]
+    protected projectImporters?: ProjectImporterConnector[]
     protected projectQuestionActions?: ProjectQuestionActionConnector[]
     protected projectTabs?: ProjectTabConnector[]
     protected settings?: SettingsConnector
@@ -95,6 +97,30 @@ export class PluginBuilder<S, U> {
 
         const projectActionElement = this.elementFactory.createProjectActionElement(component)
         customElements.define(element, projectActionElement)
+
+        return this
+    }
+
+    addProjectImporter(
+        name: string,
+        url: string,
+        element: string,
+        component: ProjectImporterComponent<S, U>,
+        kmPatterns: string[] | null = null,
+    ): PluginBuilder<S, U> {
+        if (!this.projectImporters) {
+            this.projectImporters = []
+        }
+
+        this.projectImporters.push({
+            name,
+            url,
+            element,
+            kmPatterns,
+        })
+
+        const importerElement = this.elementFactory.createProjectImporterElement(component)
+        customElements.define(element, importerElement)
 
         return this
     }
@@ -184,6 +210,7 @@ export class PluginBuilder<S, U> {
 
         if (this.documentActions) connectors.documentActions = this.documentActions
         if (this.projectActions) connectors.projectActions = this.projectActions
+        if (this.projectImporters) connectors.projectImporters = this.projectImporters
         if (this.projectQuestionActions)
             connectors.projectQuestionActions = this.projectQuestionActions
         if (this.projectTabs) connectors.projectTabs = this.projectTabs

@@ -1,6 +1,7 @@
 export * from './base-element'
 export * from './document-action-element'
 export * from './project-action-element'
+export * from './project-importer-element'
 export * from './project-question-action-element'
 export * from './project-tab-element'
 export * from './react-element'

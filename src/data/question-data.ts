@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { makeJsonCodecSimple } from '../utils/json'
+import { AnnotationDataSchema } from './annotation-data'
 
 export const QuestionValueTypeSchema = z.enum([
     'StringQuestionValueType',
@@ -24,7 +25,7 @@ export const CommonQuestionFieldsSchema = z.object({
     tagUuids: z.array(z.uuid()),
     referenceUuids: z.array(z.uuid()),
     expertUuids: z.array(z.uuid()),
-    //   annotations: z.array(AnnotationSchema),
+    annotations: z.array(AnnotationDataSchema),
 })
 
 export const OptionsQuestionFieldsSchema = z.object({

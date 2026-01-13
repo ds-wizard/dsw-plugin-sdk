@@ -1,8 +1,11 @@
-import { ProjectQuestionActionComponent, ProjectQuestionActionElement } from 'src/elements'
-import { ProjectTabComponent, ProjectTabElement } from 'src/elements/project-tab-element'
-
+import { ProjectQuestionActionComponent, ProjectQuestionActionElement } from '../elements'
 import { DocumentActionComponent, DocumentActionElement } from '../elements/document-action-element'
 import { ProjectActionComponent, ProjectActionElement } from '../elements/project-action-element'
+import {
+    ProjectImporterComponent,
+    ProjectImporterElement,
+} from '../elements/project-importer-element'
+import { ProjectTabComponent, ProjectTabElement } from '../elements/project-tab-element'
 import { SettingsComponent, SettingsElement } from '../elements/settings-element'
 import { UserSettingsComponent, UserSettingsElement } from '../elements/user-settings-element'
 import { JsonCodec } from '../utils/json'
@@ -10,6 +13,7 @@ import { JsonCodec } from '../utils/json'
 export type DocumentActionElementClass<S, U> = new (
     ...args: unknown[]
 ) => DocumentActionElement<S, U>
+export type ImporterElementClass<S, U> = new (...args: unknown[]) => ProjectImporterElement<S, U>
 export type ProjectActionElementClass<S, U> = new (...args: unknown[]) => ProjectActionElement<S, U>
 export type ProjectQuestionActionElementClass<S, U> = new (
     ...args: unknown[]
@@ -44,6 +48,27 @@ export class ElementFactory<S, U> {
 
             getReactComponent(): DocumentActionComponent<S, U> {
                 return documentActionComponent
+            }
+        }
+    }
+
+    createProjectImporterElement(
+        projectImporterComponent: ProjectImporterComponent<S, U>,
+    ): ImporterElementClass<S, U> {
+        const settingsDataCodec = this.settingsDataCodec
+        const userSettingsDataCodec = this.userSettingsDataCodec
+
+        return class extends ProjectImporterElement<S, U> {
+            getSettingsDataCodec(): JsonCodec<S> {
+                return settingsDataCodec
+            }
+
+            getUserSettingsDataCodec(): JsonCodec<U> {
+                return userSettingsDataCodec
+            }
+
+            getReactComponent(): ProjectImporterComponent<S, U> {
+                return projectImporterComponent
             }
         }
     }
