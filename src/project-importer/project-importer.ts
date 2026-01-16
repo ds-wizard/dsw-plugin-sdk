@@ -43,6 +43,15 @@ export class ProjectImporter {
         })
     }
 
+    setIntegrationReplyLegacy(path: Path, value: string, id: string) {
+        this.events.push({
+            type: 'ReplyIntegrationLegacy',
+            path: path.join('.'),
+            value,
+            id,
+        })
+    }
+
     addItem(path: Path): string {
         const uuid = createUUID()
         this.events.push({

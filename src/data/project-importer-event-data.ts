@@ -21,6 +21,13 @@ export const ReplyIntegrationEventSchema = z.object({
     raw: JsonValueSchema,
 })
 
+export const ReplyIntegrationLegacyEventSchema = z.object({
+    type: z.literal('ReplyIntegrationLegacy'),
+    path: z.string(),
+    value: z.string(),
+    id: z.string(),
+})
+
 export const ReplyItemSelectEventSchema = z.object({
     type: z.literal('ReplyItemSelect'),
     path: z.string(),
@@ -39,6 +46,7 @@ export const ProjectImporterEventSchema = z.discriminatedUnion('type', [
     ReplyListEventSchema,
     ReplyIntegrationEventSchema,
     ReplyItemSelectEventSchema,
+    ReplyIntegrationLegacyEventSchema,
     AddItemEventSchema,
 ])
 
@@ -46,6 +54,7 @@ export const ProjectImporterEventSchema = z.discriminatedUnion('type', [
 export type ReplyStringEvent = z.infer<typeof ReplyStringEventSchema>
 export type ReplyListEvent = z.infer<typeof ReplyListEventSchema>
 export type ReplyIntegrationEvent = z.infer<typeof ReplyIntegrationEventSchema>
+export type ReplyIntegrationLegacyEvent = z.infer<typeof ReplyIntegrationLegacyEventSchema>
 export type ReplyItemSelectEvent = z.infer<typeof ReplyItemSelectEventSchema>
 export type AddItemEvent = z.infer<typeof AddItemEventSchema>
 
