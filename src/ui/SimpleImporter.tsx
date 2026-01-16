@@ -1,39 +1,35 @@
 import { ChangeEvent, ReactNode, useId, useState } from 'react'
 
-import { KnowledgeModelData } from '../data'
-import type { ProjectImporterComponentProps } from '../elements'
+import { KnowledgeModelData, ProjectImporterEvent } from '../data'
 import { ProjectImporter } from '../project-importer'
 
 type ReadAs = 'text' | 'arrayBuffer' | 'dataURL'
 
-export type SimpleImporterProps<TParsed = unknown> = ProjectImporterComponentProps<
-    unknown,
-    unknown
-> & {
+export type SimpleImporterProps<TParsed = unknown> = {
+    // SDK opinionated output
+    onImport: (events: ProjectImporterEvent[]) => void
+
+    // Optional context
+    knowledgeModel?: KnowledgeModelData | null
+
+    // UI
     heading: ReactNode
     label: ReactNode
     description?: ReactNode
 
-    /** File input accept attribute */
-    accept?: string
+    // File handling
+    accept?: string // default application/json
+    readAs?: ReadAs // default text
 
-    /** How to read the file */
-    readAs?: ReadAs
-
-    /**
-     * Convert FileReader result into parsed data.
-     * Defaults to JSON.parse for text input.
-     */
-    parse?: (raw: string | ArrayBuffer) => TParsed
-
-    /** Map parsed data into ProjectImporter */
+    // Parsing + import mapping
+    parse?: (raw: string | ArrayBuffer) => TParsed // default JSON.parse(text)
     importData: (
         importer: ProjectImporter,
         parsed: TParsed,
         knowledgeModel: KnowledgeModelData | null,
     ) => void
 
-    /** Error handling */
+    // Errors
     errorMessage?: ReactNode
     formatError?: (err: unknown) => ReactNode
 
@@ -69,7 +65,7 @@ function readFile(file: File, readAs: ReadAs): Promise<string | ArrayBuffer> {
 
 export function SimpleImporter<TParsed = unknown>({
     onImport,
-    knowledgeModel,
+    knowledgeModel = null,
 
     heading,
     label,

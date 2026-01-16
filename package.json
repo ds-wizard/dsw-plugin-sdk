@@ -6,7 +6,7 @@
     "repository": {
         "url": "git+https://github.com/ds-wizard/dsw-plugin-sdk.git"
     },
-    "version": "0.5.0",
+    "version": "0.5.1",
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
