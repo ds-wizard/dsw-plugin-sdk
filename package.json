@@ -41,9 +41,9 @@
             "types": "./dist/ui/ModalContent.d.ts",
             "import": "./dist/ui/ModalContent.js"
         },
-        "./ui/SimpleImporter": {
-            "types": "./dist/ui/SimpleImporter.d.ts",
-            "import": "./dist/ui/SimpleImporter.js"
+        "./ui/SimpleFileImporter": {
+            "types": "./dist/ui/SimpleFileImporter.d.ts",
+            "import": "./dist/ui/SimpleFileImporter.js"
         },
         "./utils": {
             "types": "./dist/utils/index.d.ts",

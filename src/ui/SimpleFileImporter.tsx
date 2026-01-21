@@ -5,7 +5,7 @@ import { ProjectImporter } from '../project-importer'
 
 type ReadAs = 'text' | 'arrayBuffer' | 'dataURL'
 
-export type SimpleImporterProps<TParsed = unknown> = {
+export type SimpleFileImporterProps<TParsed = unknown> = {
     // SDK opinionated output
     onImport: (events: ProjectImporterEvent[]) => void
 
@@ -63,7 +63,7 @@ function readFile(file: File, readAs: ReadAs): Promise<string | ArrayBuffer> {
     })
 }
 
-export function SimpleImporter<TParsed = unknown>({
+export function SimpleFileImporter<TParsed = unknown>({
     onImport,
     knowledgeModel = null,
 
@@ -80,7 +80,7 @@ export function SimpleImporter<TParsed = unknown>({
     errorMessage = 'Error reading or parsing file. Make sure you selected a valid document.',
     formatError,
     inputId,
-}: SimpleImporterProps<TParsed>) {
+}: SimpleFileImporterProps<TParsed>) {
     const autoId = useId()
     const id = inputId ?? `simple-importer-${autoId}`
     const [error, setError] = useState<ReactNode | null>(null)

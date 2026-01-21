@@ -10,7 +10,7 @@ export default defineConfig({
         'src/types.ts',
         'src/protocol.ts',
         'src/ui/ModalContent.tsx',
-        'src/ui/SimpleImporter.tsx',
+        'src/ui/SimpleFileImporter.tsx',
         'src/utils/index.ts',
         'src/version.ts',
         'src/vite/index.ts',
