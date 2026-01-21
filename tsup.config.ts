@@ -9,6 +9,7 @@ export default defineConfig({
         'src/data/index.ts',
         'src/types.ts',
         'src/protocol.ts',
+        'src/ui/ModalContent.tsx',
         'src/ui/SimpleImporter.tsx',
         'src/utils/index.ts',
         'src/version.ts',
