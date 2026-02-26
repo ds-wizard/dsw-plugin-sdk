@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { makeJsonCodecSimple } from '../utils/json'
 import { DocumentStateDataSchema } from './document-state-data'
 import { DocumentTemplateFormatDataSchema } from './document-template-format-data'
+import { DocumentTemplateInfoDataSchema } from './document-template-info-data'
 import { ProjectInfoDataSchema } from './project-info-data'
 
 export const DocumentDataSchema = z.object({
@@ -12,8 +13,7 @@ export const DocumentDataSchema = z.object({
     project: ProjectInfoDataSchema,
     projectEventUuid: z.uuid().nullable(),
     projectVersion: z.string().nullable(),
-    documentTemplateId: z.string(),
-    documentTemplateName: z.string(),
+    documentTemplate: DocumentTemplateInfoDataSchema,
     format: DocumentTemplateFormatDataSchema,
     state: DocumentStateDataSchema,
     createdBy: z.uuid().nullable(),
