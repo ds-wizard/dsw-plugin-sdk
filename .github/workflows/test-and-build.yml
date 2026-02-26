@@ -1,15 +1,10 @@
-name: Node.js Package
+name: Test and Build
 on:
-    create:
-        tags:
-            - v*
-
-permissions:
-    id-token: write # Required for OIDC
-    contents: read
+    push:
+    pull_request:
 
 jobs:
-    build:
+    test_and_build:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -22,4 +17,3 @@ jobs:
             - run: npm run lint
             - run: npm run typecheck
             - run: npm run build
-            - run: npm publish --access public
