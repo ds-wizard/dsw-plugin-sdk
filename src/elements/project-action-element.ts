@@ -34,11 +34,11 @@ export abstract class ProjectActionElement<S, U> extends BaseElement<S, U> {
         const raw = this.getAttribute(ATTR.projectValue)
         if (!raw || !raw.trim()) return
 
-        const decoded = this.decodeDocument(raw)
+        const decoded = this.decodeProject(raw)
         if (decoded !== null) this.project = decoded
     }
 
-    protected decodeDocument(raw: string): ProjectData | null {
+    protected decodeProject(raw: string): ProjectData | null {
         const result = ProjectDataCodec.decode(raw)
         return result.ok ? result.value : null
     }
