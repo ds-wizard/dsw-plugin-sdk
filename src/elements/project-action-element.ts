@@ -30,6 +30,12 @@ export abstract class ProjectActionElement<S, U> extends BaseElement<S, U> {
         this.syncProjectFromAttribute()
     }
 
+    protected onAttributeChanged(name: string): void {
+        super.onAttributeChanged(name)
+
+        if (name === ATTR.projectValue) this.syncProjectFromAttribute()
+    }
+
     protected syncProjectFromAttribute(): void {
         const raw = this.getAttribute(ATTR.projectValue)
         if (!raw || !raw.trim()) return

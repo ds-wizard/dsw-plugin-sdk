@@ -1,4 +1,11 @@
-import { ProjectQuestionActionComponent, ProjectQuestionActionElement } from '../elements'
+import {
+    KnowledgeModelIntegrationEditorComponent,
+    KnowledgeModelIntegrationEditorElement,
+    KnowledgeModelIntegrationQuestionnaireComponent,
+    KnowledgeModelIntegrationQuestionnaireElement,
+    ProjectQuestionActionComponent,
+    ProjectQuestionActionElement,
+} from '../elements'
 import { DocumentActionComponent, DocumentActionElement } from '../elements/document-action-element'
 import { ProjectActionComponent, ProjectActionElement } from '../elements/project-action-element'
 import {
@@ -13,7 +20,15 @@ import { JsonCodec } from '../utils/json'
 export type DocumentActionElementClass<S, U> = new (
     ...args: unknown[]
 ) => DocumentActionElement<S, U>
-export type ImporterElementClass<S, U> = new (...args: unknown[]) => ProjectImporterElement<S, U>
+export type KnowledgeModelIntegrationEditorElementClass<S, U, P> = new (
+    ...args: unknown[]
+) => KnowledgeModelIntegrationEditorElement<S, U, P>
+export type KnowledgeModelIntegrationQuestionnaireElementClass<S, U, P> = new (
+    ...args: unknown[]
+) => KnowledgeModelIntegrationQuestionnaireElement<S, U, P>
+export type ProjectImporterElementClass<S, U> = new (
+    ...args: unknown[]
+) => ProjectImporterElement<S, U>
 export type ProjectActionElementClass<S, U> = new (...args: unknown[]) => ProjectActionElement<S, U>
 export type ProjectQuestionActionElementClass<S, U> = new (
     ...args: unknown[]
@@ -52,9 +67,65 @@ export class ElementFactory<S, U> {
         }
     }
 
+    createKnowledgeModelIntegrationEditorElement<P>(
+        knowledgeModelIntegrationEditorComponent: KnowledgeModelIntegrationEditorComponent<S, U, P>,
+        pluginIntegrationSettingsDataCodec: JsonCodec<P>,
+    ): KnowledgeModelIntegrationEditorElementClass<S, U, P> {
+        const settingsDataCodec = this.settingsDataCodec
+        const userSettingsDataCodec = this.userSettingsDataCodec
+
+        return class extends KnowledgeModelIntegrationEditorElement<S, U, P> {
+            getSettingsDataCodec(): JsonCodec<S> {
+                return settingsDataCodec
+            }
+
+            getUserSettingsDataCodec(): JsonCodec<U> {
+                return userSettingsDataCodec
+            }
+
+            getPluginIntegrationSettingsDataCodec(): JsonCodec<P> {
+                return pluginIntegrationSettingsDataCodec
+            }
+
+            getReactComponent(): KnowledgeModelIntegrationEditorComponent<S, U, P> {
+                return knowledgeModelIntegrationEditorComponent
+            }
+        }
+    }
+
+    createKnowledgeModelIntegrationQuestionnaireElement<P>(
+        knowledgeModelIntegrationQuestionnaireComponent: KnowledgeModelIntegrationQuestionnaireComponent<
+            S,
+            U,
+            P
+        >,
+        pluginIntegrationSettingsDataCodec: JsonCodec<P>,
+    ): KnowledgeModelIntegrationQuestionnaireElementClass<S, U, P> {
+        const settingsDataCodec = this.settingsDataCodec
+        const userSettingsDataCodec = this.userSettingsDataCodec
+
+        return class extends KnowledgeModelIntegrationQuestionnaireElement<S, U, P> {
+            getSettingsDataCodec(): JsonCodec<S> {
+                return settingsDataCodec
+            }
+
+            getUserSettingsDataCodec(): JsonCodec<U> {
+                return userSettingsDataCodec
+            }
+
+            getPluginIntegrationSettingsDataCodec(): JsonCodec<P> {
+                return pluginIntegrationSettingsDataCodec
+            }
+
+            getReactComponent(): KnowledgeModelIntegrationQuestionnaireComponent<S, U, P> {
+                return knowledgeModelIntegrationQuestionnaireComponent
+            }
+        }
+    }
+
     createProjectImporterElement(
         projectImporterComponent: ProjectImporterComponent<S, U>,
-    ): ImporterElementClass<S, U> {
+    ): ProjectImporterElementClass<S, U> {
         const settingsDataCodec = this.settingsDataCodec
         const userSettingsDataCodec = this.userSettingsDataCodec
 
@@ -135,6 +206,7 @@ export class ElementFactory<S, U> {
             }
         }
     }
+
     createSettingsElement(settingsComponent: SettingsComponent<S>): SettingsElementClass<S> {
         const settingsDataCodec = this.settingsDataCodec
 

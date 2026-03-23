@@ -30,6 +30,12 @@ export abstract class DocumentActionElement<S, U> extends BaseElement<S, U> {
         this.syncDocumentFromAttribute()
     }
 
+    protected onAttributeChanged(name: string): void {
+        super.onAttributeChanged(name)
+
+        if (name === ATTR.documentValue) this.syncDocumentFromAttribute()
+    }
+
     protected syncDocumentFromAttribute(): void {
         const raw = this.getAttribute(ATTR.documentValue)
         if (!raw || !raw.trim()) return

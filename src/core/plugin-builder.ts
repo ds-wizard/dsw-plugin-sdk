@@ -1,4 +1,8 @@
-import { ProjectQuestionActionComponent } from '../elements'
+import {
+    KnowledgeModelIntegrationEditorComponent,
+    KnowledgeModelIntegrationQuestionnaireComponent,
+    ProjectQuestionActionComponent,
+} from '../elements'
 import { DocumentActionComponent } from '../elements/document-action-element'
 import { ProjectActionComponent } from '../elements/project-action-element'
 import { ProjectImporterComponent } from '../elements/project-importer-element'
@@ -8,6 +12,7 @@ import { UserSettingsComponent } from '../elements/user-settings-element'
 import {
     Connectors,
     DocumentActionConnector,
+    KnowledgeModelIntegrationConnector,
     Plugin,
     PluginMetadata,
     ProjectActionConnector,
@@ -26,6 +31,7 @@ export class PluginBuilder<S, U> {
     protected elementFactory: ElementFactory<S, U>
 
     protected documentActions?: DocumentActionConnector[]
+    protected knowledgeModelIntegrations?: KnowledgeModelIntegrationConnector[]
     protected projectActions?: ProjectActionConnector[]
     protected projectImporters?: ProjectImporterConnector[]
     protected projectQuestionActions?: ProjectQuestionActionConnector[]
@@ -75,6 +81,45 @@ export class PluginBuilder<S, U> {
 
         const documentActionElement = this.elementFactory.createDocumentActionElement(component)
         customElements.define(element, documentActionElement)
+
+        return this
+    }
+
+    addKnowledgeModelIntegration<P>(
+        name: string,
+        integrationId: string,
+        pluginIntegrationSettingsDataCodec: JsonCodec<P>,
+        editorElement: string,
+        editorComponent: KnowledgeModelIntegrationEditorComponent<S, U, P>,
+        questionnaireElement: string,
+        questionnaireComponent: KnowledgeModelIntegrationQuestionnaireComponent<S, U, P>,
+        rendersReply: boolean = false,
+    ): PluginBuilder<S, U> {
+        if (!this.knowledgeModelIntegrations) {
+            this.knowledgeModelIntegrations = []
+        }
+
+        this.knowledgeModelIntegrations.push({
+            name,
+            integrationId,
+            editorElement: editorElement,
+            questionnaireElement,
+            rendersReply,
+        })
+
+        const customEditorElement =
+            this.elementFactory.createKnowledgeModelIntegrationEditorElement(
+                editorComponent,
+                pluginIntegrationSettingsDataCodec,
+            )
+        customElements.define(editorElement, customEditorElement)
+
+        const customQuestionnaireElement =
+            this.elementFactory.createKnowledgeModelIntegrationQuestionnaireElement(
+                questionnaireComponent,
+                pluginIntegrationSettingsDataCodec,
+            )
+        customElements.define(questionnaireElement, customQuestionnaireElement)
 
         return this
     }
@@ -209,6 +254,8 @@ export class PluginBuilder<S, U> {
         let connectors: Connectors = {}
 
         if (this.documentActions) connectors.documentActions = this.documentActions
+        if (this.knowledgeModelIntegrations)
+            connectors.knowledgeModelIntegrations = this.knowledgeModelIntegrations
         if (this.projectActions) connectors.projectActions = this.projectActions
         if (this.projectImporters) connectors.projectImporters = this.projectImporters
         if (this.projectQuestionActions)

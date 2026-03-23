@@ -1,5 +1,7 @@
 export * from './base-element'
 export * from './document-action-element'
+export * from './knowledge-model-integration-editor-element'
+export * from './knowledge-model-integration-questionnaire-element'
 export * from './project-action-element'
 export * from './project-importer-element'
 export * from './project-question-action-element'

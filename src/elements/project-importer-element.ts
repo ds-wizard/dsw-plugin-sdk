@@ -33,6 +33,12 @@ export abstract class ProjectImporterElement<S, U> extends BaseElement<S, U> {
         this.syncKnowledgeModelFromAttribute()
     }
 
+    protected onAttributeChanged(name: string): void {
+        super.onAttributeChanged(name)
+
+        if (name === ATTR.knowledgeModelValue) this.syncKnowledgeModelFromAttribute()
+    }
+
     protected syncKnowledgeModelFromAttribute(): void {
         const raw = this.getAttribute(ATTR.knowledgeModelValue)
         if (!raw || !raw.trim()) return

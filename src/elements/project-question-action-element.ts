@@ -44,6 +44,14 @@ export abstract class ProjectQuestionActionElement<S, U> extends BaseElement<S, 
         this.syncQuestionPathFromAttribute()
     }
 
+    protected onAttributeChanged(name: string): void {
+        super.onAttributeChanged(name)
+
+        if (name === ATTR.projectValue) this.syncProjectFromAttribute()
+        if (name === ATTR.questionValue) this.syncQuestionFromAttribute()
+        if (name === ATTR.questionPathValue) this.syncQuestionPathFromAttribute()
+    }
+
     protected syncProjectFromAttribute(): void {
         const raw = this.getAttribute(ATTR.projectValue)
         if (!raw || !raw.trim()) return

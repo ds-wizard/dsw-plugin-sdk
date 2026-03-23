@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const JsonValueSchema: z.ZodType<unknown> = z.unknown()
+import { JsonValueSchema } from './json-value-schema'
 
 export const ReplyStringEventSchema = z.object({
     type: z.literal('ReplyString'),
