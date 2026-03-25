@@ -24,6 +24,7 @@ export type PluginManifest = {
 
 export type Connectors = {
     documentActions?: DocumentActionConnector[]
+    knowledgeModelIntegrations?: KnowledgeModelIntegrationConnector[]
     projectActions?: ProjectActionConnector[]
     projectImporters?: ProjectImporterConnector[]
     projectQuestionActions?: ProjectQuestionActionConnector[]
@@ -42,6 +43,14 @@ export type DocumentActionConnector = {
     element: string
     dtPatterns: string[] | null
     dtFormats: string[] | null
+}
+
+export type KnowledgeModelIntegrationConnector = {
+    integrationId: string
+    editorElement: string
+    name: string
+    questionnaireElement: string
+    rendersReply: boolean
 }
 
 export type ProjectImporterConnector = {

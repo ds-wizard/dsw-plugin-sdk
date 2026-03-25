@@ -111,6 +111,69 @@ export default function DocumentAction({
 }
 ```
 
+#### Knowledge Model Integration
+
+The Knowledge Model Integration connector adds two components: one for the KM editor to set up the integration, and a second for the Questionnaire to render the selection and optionally the selected reply.
+
+```ts
+const plugin = PluginBuilder.create(...)
+        .addKnowledgeModelIntegration(
+            'Plugin Integration',
+            'plugin-integration', // ID of the integration to distinguish multiple integrations by the same plugin
+            PluginIntegrationSettingsDataCodec, // data codec for the plugin integration settings
+            'x-plugin-integration-editor', // name of the web component for the KM editor
+            PluginIntegrationEditor, // React component with KM editor component functionality
+            'x-plugin-integration-selection', // name of the web component for the questionnaire
+            PluginIntegrationSelection, // React component with Questionnaire component functionality
+            true // (optional) if true plugin should handle rendering of the reply, otherwise the default Markdown is used
+        )
+```
+
+The React component for the KM editor has the following input:
+
+- `settings` - custom plugin global settings
+- `userSettings` - custom plugin user settings
+- `pluginIntegrationSettings` - custom plugin integration settings
+- `onPluginIntegrationSettingsChange` - call when plugin integration settings data changes
+
+```ts
+export default function PluginIntegrationEditor({
+    settings,
+    userSettings,
+    pluginIntegrationSettings,
+    onPluginIntegrationSettingsChange,
+}: KnowledgeModelIntegrationEditorComponentProps<SettingsData, UserSettingsData, PluginIntegrationData>) {
+    return <div>KM Editor Component</div>
+}
+```
+
+The React component for the questionnaire has the following input:
+
+- `settings` - custom plugin global settings
+- `userSettings` - custom plugin user settings
+- `pluginIntegrationSettings` - custom plugin integration settings
+- `integrationReply` - integration reply data as defined in [integration-reply-data.ts](src/data/integration-reply-data.ts)
+- `onReplyChange` - call when the reply is selected
+
+```ts
+import { IntegrationReply, createIntegrationReply } from "@ds-wizard/plugin-sdk/data";
+
+export default function PluginIntegrationQuestionnaire({
+    settings,
+    userSettings,
+    pluginIntegrationSettings,
+    integrationReply,
+    onReplyChange
+}: KnowledgeModelIntegrationQuestionnaireComponentProps<SettingsData, UserSettingsData, PluginIntegrationData>) {
+    // use this helper to create the reply data
+    const reply: IntegrationReply = createIntegrationReply('**ExampleReply**\n\nContaining a Markdown text', { value: 'Example raw value', id: 25 })
+
+    return <div>Select reply here<br/>
+        <button onClick={() => onReplyChange(reply)}>Set example reply</button>
+    </div>
+}
+```
+
 #### Project Action
 
 The Project Action connector adds an action to the project action list on the project detail page. The action will open a modal window that renders the plugin component. Optionally, the project action can be limited to only a selection of knowledge models.

@@ -55,7 +55,6 @@ export abstract class SettingsElement<S> extends ReactElement {
                 onSettingsChange: (next) => {
                     this.settings = next
                     const serialized = this.getSettingsDataCodec().encode(next)
-
                     this.requestRender()
                     this.emit(EVT.settingsValueChange, { value: serialized })
                 },

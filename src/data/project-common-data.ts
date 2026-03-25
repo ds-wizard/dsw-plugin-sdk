@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { makeJsonCodecSimple } from '../utils/json'
-import { KnowledgeModelPackageSuggestionDataSchema } from './knowldge-model-package-suggestion-data'
+import { KnowledgeModelPackageSuggestionDataSchema } from './knowledge-model-package-suggestion-data'
 
 export const ProjectDataSchema = z.object({
     uuid: z.uuid(),
