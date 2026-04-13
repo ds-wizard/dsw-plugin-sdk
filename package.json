@@ -37,6 +37,10 @@
             "types": "./dist/project-importer/index.d.ts",
             "import": "./dist/project-importer/index.js"
         },
+        "./ui/Flash": {
+            "types": "./dist/ui/Flash.d.ts",
+            "import": "./dist/ui/Flash.js"
+        },
         "./ui/ModalContent": {
             "types": "./dist/ui/ModalContent.d.ts",
             "import": "./dist/ui/ModalContent.js"

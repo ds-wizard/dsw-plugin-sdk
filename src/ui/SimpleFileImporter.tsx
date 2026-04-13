@@ -2,6 +2,7 @@ import { ChangeEvent, ReactNode, useId, useState } from 'react'
 
 import { KnowledgeModelData, ProjectImporterEvent } from '../data'
 import { ProjectImporter } from '../project-importer'
+import { FlashError } from './Flash'
 
 type ReadAs = 'text' | 'arrayBuffer' | 'dataURL'
 
@@ -113,11 +114,7 @@ export function SimpleFileImporter<TParsed = unknown>({
             </div>
 
             <div className="mb-3">
-                {error && (
-                    <div className="alert alert-danger" role="alert">
-                        {error}
-                    </div>
-                )}
+                {error && <FlashError>{error}</FlashError>}
 
                 <div className="form-group">
                     <label htmlFor={id} className="form-label">
