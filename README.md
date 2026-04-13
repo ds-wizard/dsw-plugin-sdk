@@ -422,6 +422,7 @@ export default function UserSettings({
 
 There are UI components prepared to simplify the development of common use cases.
 
+- [Flash](src/ui/Flash.tsx) - for flash messages
 - [Modal Content](src/ui/ModalContent.tsx) - for all connectors that render into a modal that don't need anything special
 - [Simple File Importer](src/ui/SimpleFileImporter.tsx) - for importers that only need a file and handle the import based on that
 
