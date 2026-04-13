@@ -1,6 +1,6 @@
 # Changelog
 
-# Next
+# 0.9.1 (2026-04-13)
 
 - Fix exposing of requests module
 
