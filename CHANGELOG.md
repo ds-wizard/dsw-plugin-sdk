@@ -1,6 +1,6 @@
 # Changelog
 
-# Next
+# 0.9.0 (2026-04-13)
 
 - Added Flash messages components
 - Added requests and session helpers
