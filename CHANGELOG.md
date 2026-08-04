@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.9.2 (2026-08-04)
+
+- Fixed knowledge model data schema
+
 # 0.9.1 (2026-04-13)
 
 - Fix exposing of requests module
