@@ -424,7 +424,7 @@ There are UI components prepared to simplify the development of common use cases
 
 | SDK Version | Wizard Version | Plugin API Version |
 | ----------- | -------------- | ------------------ |
-| 0.9.1       | >=4.29         | 0.3                |
+| 0.9.2       | >=4.29         | 0.3                |
 
 ## License
 
