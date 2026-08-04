@@ -28,9 +28,6 @@ export const KnowledgeModelDataSchema = z
             resourcePages: EntityMapDataSchema,
             tags: EntityMapDataSchema,
         }),
-        structure: z.object({
-            questions: EntityMapDataSchema,
-        }),
     })
     .loose()
 
