@@ -2,12 +2,14 @@ import React from 'react'
 
 import { ProjectData, ProjectDataCodec } from '../data/project-common-data'
 import { QuestionData, QuestionDataCodec } from '../data/question-data'
+import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { BaseElement } from './base-element'
 
 export type ProjectQuestionActionComponentProps<S, U> = {
     settings: S
     userSettings: U
+    user: UserData | null
     project: ProjectData | null
     question: QuestionData | null
     questionPath: string | null
@@ -95,6 +97,7 @@ export abstract class ProjectQuestionActionElement<S, U> extends BaseElement<S, 
             React.createElement(Component, {
                 settings: this.settings,
                 userSettings: this.userSettings,
+                user: this.user,
                 project: this.project,
                 question: this.question,
                 questionPath: this.questionPath,

@@ -1,1 +1,1 @@
-export const PluginApiVersion = '0.3' as const
+export const PluginApiVersion = '0.4' as const

@@ -2,12 +2,14 @@ import React from 'react'
 
 import { ProjectImporterEvent } from '../data'
 import { KnowledgeModelData, KnowledgeModelDataCodec } from '../data/knowledge-model-data'
+import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { BaseElement } from './base-element'
 
 export type ProjectImporterComponentProps<S, U> = {
     settings: S
     userSettings: U
+    user: UserData | null
     knowledgeModel: KnowledgeModelData | null
     onImport: (events: ProjectImporterEvent[]) => void
 }
@@ -61,6 +63,7 @@ export abstract class ProjectImporterElement<S, U> extends BaseElement<S, U> {
             React.createElement(Component, {
                 settings: this.settings,
                 userSettings: this.userSettings,
+                user: this.user,
                 knowledgeModel: this.knowledgeModel,
                 onImport: (events) => {
                     this.emit(EVT.import, { events })
