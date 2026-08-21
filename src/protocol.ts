@@ -8,6 +8,7 @@ export const ATTR = {
     questionValue: 'question-value',
     settingsValue: 'settings-value',
     userSettingsValue: 'user-settings-value',
+    userValue: 'user-value',
 } as const
 
 export const EVT = {

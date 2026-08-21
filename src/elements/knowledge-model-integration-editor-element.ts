@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { JsonCodec } from '../utils'
 import { BaseElement } from './base-element'
@@ -7,6 +8,7 @@ import { BaseElement } from './base-element'
 export type KnowledgeModelIntegrationEditorComponentProps<S, U, P> = {
     settings: S
     userSettings: U
+    user: UserData | null
     pluginIntegrationSettings: P | null
     onPluginIntegrationSettingsChange: (pluginIntegrationSettings: P) => void
 }
@@ -62,6 +64,7 @@ export abstract class KnowledgeModelIntegrationEditorElement<S, U, P> extends Ba
             React.createElement(Component, {
                 settings: this.settings,
                 userSettings: this.userSettings,
+                user: this.user,
                 pluginIntegrationSettings: this.pluginIntegrationSettings,
                 onPluginIntegrationSettingsChange: (next) => {
                     this.pluginIntegrationSettings = next

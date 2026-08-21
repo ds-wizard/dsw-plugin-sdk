@@ -1,12 +1,14 @@
 import React from 'react'
 
 import { ProjectData, ProjectDataCodec } from '../data/project-common-data'
+import { UserData } from '../data/user-data'
 import { ATTR } from '../protocol'
 import { BaseElement } from './base-element'
 
 export type ProjectTabComponentProps<S, U> = {
     settings: S
     userSettings: U
+    user: UserData | null
     project: ProjectData | null
 }
 
@@ -57,6 +59,7 @@ export abstract class ProjectTabElement<S, U> extends BaseElement<S, U> {
             React.createElement(Component, {
                 settings: this.settings,
                 userSettings: this.userSettings,
+                user: this.user,
                 project: this.project,
             }),
         )

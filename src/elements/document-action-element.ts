@@ -1,12 +1,14 @@
 import React from 'react'
 
 import { DocumentData, DocumentDataCodec } from '../data/document-data'
+import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { BaseElement } from './base-element'
 
 export type DocumentActionComponentProps<S, U> = {
     settings: S
     userSettings: U
+    user: UserData | null
     document: DocumentData | null
     onActionClose: () => void
 }
@@ -58,6 +60,7 @@ export abstract class DocumentActionElement<S, U> extends BaseElement<S, U> {
             React.createElement(Component, {
                 settings: this.settings,
                 userSettings: this.userSettings,
+                user: this.user,
                 document: this.document,
                 onActionClose: () => {
                     this.emitEmpty(EVT.actionClose)

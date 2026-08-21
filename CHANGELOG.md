@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.10.0 (2026-08-21)
+
+- Added user data to plugin elements
+
 # 0.9.2 (2026-08-04)
 
 - Fixed knowledge model data schema

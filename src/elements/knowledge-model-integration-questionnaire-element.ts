@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { IntegrationReply, IntegrationReplyCodec } from '../data/integration-reply-data'
+import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { JsonCodec } from '../utils'
 import { BaseElement } from './base-element'
@@ -8,6 +9,7 @@ import { BaseElement } from './base-element'
 export type KnowledgeModelIntegrationQuestionnaireComponentProps<S, U, P> = {
     settings: S
     userSettings: U
+    user: UserData | null
     pluginIntegrationSettings: P | null
     integrationReply: IntegrationReply | null
     onReplyChange: (reply: IntegrationReply) => void
@@ -85,6 +87,7 @@ export abstract class KnowledgeModelIntegrationQuestionnaireElement<S, U, P> ext
             React.createElement(Component, {
                 settings: this.settings,
                 userSettings: this.userSettings,
+                user: this.user,
                 pluginIntegrationSettings: this.pluginIntegrationSettings,
                 integrationReply: this.integrationReply,
                 onReplyChange: (next) => {

@@ -1,12 +1,14 @@
 import React from 'react'
 
 import { ProjectData, ProjectDataCodec } from '../data/project-common-data'
+import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { BaseElement } from './base-element'
 
 export type ProjectActionComponentProps<S, U> = {
     settings: S
     userSettings: U
+    user: UserData | null
     project: ProjectData | null
     onActionClose: () => void
 }
@@ -58,6 +60,7 @@ export abstract class ProjectActionElement<S, U> extends BaseElement<S, U> {
             React.createElement(Component, {
                 settings: this.settings,
                 userSettings: this.userSettings,
+                user: this.user,
                 project: this.project,
                 onActionClose: () => {
                     this.emitEmpty(EVT.actionClose)
