@@ -1,12 +1,12 @@
-export function getApiUrlAndToken(localStorageKey: string = 'session/wizard'): {
+export function getApiUrlAndToken(localStorageKey: string = 'session/app'): {
     apiUrl: string
     token: string | null
 } {
     const sessionString = localStorage.getItem(localStorageKey)
     const session = sessionString ? JSON.parse(sessionString) : null
 
-    const apiUrl = session?.apiUrl || ''
+    const apiUrlBase = session?.apiUrlBase || ''
     const token = session?.token?.token || null
 
-    return { apiUrl, token }
+    return { apiUrl: apiUrlBase + '/wizard-api', token }
 }
