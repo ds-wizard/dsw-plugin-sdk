@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.11.0 (2026-09-23)
+
+- Fix session helper
+
 # 0.10.0 (2026-08-21)
 
 - Added user data to plugin elements
