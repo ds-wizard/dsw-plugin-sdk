@@ -6,8 +6,9 @@
     "repository": {
         "url": "git+https://github.com/ds-wizard/dsw-plugin-sdk.git"
     },
-    "version": "0.11.0",
+    "version": "0.12.0",
     "main": "dist/index.js",
+    "sideEffects": false,
     "type": "module",
     "scripts": {
         "build": "tsup",
@@ -41,17 +42,9 @@
             "types": "./dist/requests/index.d.ts",
             "import": "./dist/requests/index.js"
         },
-        "./ui/Flash": {
-            "types": "./dist/ui/Flash.d.ts",
-            "import": "./dist/ui/Flash.js"
-        },
-        "./ui/ModalContent": {
-            "types": "./dist/ui/ModalContent.d.ts",
-            "import": "./dist/ui/ModalContent.js"
-        },
-        "./ui/SimpleFileImporter": {
-            "types": "./dist/ui/SimpleFileImporter.d.ts",
-            "import": "./dist/ui/SimpleFileImporter.js"
+        "./ui/*": {
+            "types": "./dist/ui/*.d.ts",
+            "import": "./dist/ui/*.js"
         },
         "./utils": {
             "types": "./dist/utils/index.d.ts",
@@ -77,28 +70,31 @@
         "dist"
     ],
     "devDependencies": {
-        "@types/node": "^25.0.3",
-        "@types/react": "^19.2.7",
-        "@types/react-dom": "^19.2.3",
-        "@typescript-eslint/eslint-plugin": "^8.51.0",
-        "@typescript-eslint/parser": "^8.51.0",
-        "eslint": "^9.39.2",
+        "@eslint/js": "^10.0.1",
+        "@types/node": "^26.6.4",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "@typescript-eslint/eslint-plugin": "^8.71.1",
+        "@typescript-eslint/parser": "^8.71.1",
+        "eslint": "^10.12.0",
         "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-react": "^7.37.5",
-        "eslint-plugin-react-hooks": "^7.0.1",
-        "eslint-plugin-simple-import-sort": "^12.1.1",
-        "globals": "^17.4.0",
-        "prettier": "^3.7.4",
-        "react": "^19.2.3",
-        "react-dom": "^19.2.3",
+        "eslint-plugin-react-hooks": "^7.1.1",
+        "eslint-plugin-simple-import-sort": "^14.0.0",
+        "globals": "^17.13.0",
+        "prettier": "^3.9.9",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
         "tsup": "^8.5.1",
-        "typescript": "^5.9.3"
+        "typescript": "~6.0.3"
     },
     "peerDependencies": {
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
     },
     "dependencies": {
-        "zod": "^4.2.1"
+        "zod": "^4.6.5"
+    },
+    "overrides": {
+        "esbuild": "^0.28.2"
     }
 }

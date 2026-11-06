@@ -8,7 +8,10 @@ export const UserDataSchema = z.object({
     email: z.string(),
     firstName: z.string(),
     lastName: z.string(),
-    role: RoleDataSchema,
+    // The role in the organization, which holds everywhere, and the role in
+    // the workspace the user is in, if they have one there.
+    tenantRole: RoleDataSchema,
+    workspaceRole: RoleDataSchema.nullable(),
     imageUrl: z.string().nullable(),
     affiliation: z.string().nullable(),
 })

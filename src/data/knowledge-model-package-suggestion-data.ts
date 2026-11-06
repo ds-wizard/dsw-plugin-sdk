@@ -6,8 +6,7 @@ export const KnowledgeModelPackageSuggestionDataSchema = z.object({
     uuid: z.uuid(),
     name: z.string(),
     description: z.string(),
-    organizationId: z.string(),
-    kmId: z.string(),
+    id: z.string(),
     version: z.string(),
 })
 

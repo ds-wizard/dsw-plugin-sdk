@@ -1,5 +1,9 @@
 import React from 'react'
 
+import {
+    KnowledgeModelEditorData,
+    KnowledgeModelEditorDataCodec,
+} from '../data/knowledge-model-editor-data'
 import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { JsonCodec } from '../utils'
@@ -9,6 +13,7 @@ export type KnowledgeModelIntegrationEditorComponentProps<S, U, P> = {
     settings: S
     userSettings: U
     user: UserData | null
+    knowledgeModelEditor: KnowledgeModelEditorData | null
     pluginIntegrationSettings: P | null
     onPluginIntegrationSettingsChange: (pluginIntegrationSettings: P) => void
 }
@@ -20,12 +25,17 @@ export type KnowledgeModelIntegrationEditorComponent<S, U, P> = React.ComponentT
 export abstract class KnowledgeModelIntegrationEditorElement<S, U, P> extends BaseElement<S, U> {
     protected Component: KnowledgeModelIntegrationEditorComponent<S, U, P> | null = null
     protected pluginIntegrationSettings: P | null = null
+    protected knowledgeModelEditor: KnowledgeModelEditorData | null = null
 
     abstract getReactComponent(): KnowledgeModelIntegrationEditorComponent<S, U, P>
     abstract getPluginIntegrationSettingsDataCodec(): JsonCodec<P>
 
     static get observedAttributes(): string[] {
-        return [...super.observedAttributes, ATTR.pluginIntegrationSettings]
+        return [
+            ...super.observedAttributes,
+            ATTR.pluginIntegrationSettings,
+            ATTR.knowledgeModelEditorValue,
+        ]
     }
 
     protected onConnect(): void {
@@ -33,6 +43,7 @@ export abstract class KnowledgeModelIntegrationEditorElement<S, U, P> extends Ba
         this.Component = this.getReactComponent()
 
         this.syncPluginIntegrationSettingsFromAttributes()
+        this.syncKnowledgeModelEditorFromAttribute()
     }
 
     protected onAttributeChanged(name: string): void {
@@ -40,6 +51,7 @@ export abstract class KnowledgeModelIntegrationEditorElement<S, U, P> extends Ba
 
         if (name === ATTR.pluginIntegrationSettings)
             this.syncPluginIntegrationSettingsFromAttributes()
+        if (name === ATTR.knowledgeModelEditorValue) this.syncKnowledgeModelEditorFromAttribute()
     }
 
     protected syncPluginIntegrationSettingsFromAttributes(): void {
@@ -55,6 +67,14 @@ export abstract class KnowledgeModelIntegrationEditorElement<S, U, P> extends Ba
         return result.ok ? result.value : null
     }
 
+    protected syncKnowledgeModelEditorFromAttribute(): void {
+        const raw = this.getAttribute(ATTR.knowledgeModelEditorValue)
+        if (!raw || !raw.trim()) return
+
+        const result = KnowledgeModelEditorDataCodec.decode(raw)
+        if (result.ok) this.knowledgeModelEditor = result.value
+    }
+
     protected render(): void {
         const root = this.root
         const Component = this.Component
@@ -65,6 +85,7 @@ export abstract class KnowledgeModelIntegrationEditorElement<S, U, P> extends Ba
                 settings: this.settings,
                 userSettings: this.userSettings,
                 user: this.user,
+                knowledgeModelEditor: this.knowledgeModelEditor,
                 pluginIntegrationSettings: this.pluginIntegrationSettings,
                 onPluginIntegrationSettingsChange: (next) => {
                     this.pluginIntegrationSettings = next

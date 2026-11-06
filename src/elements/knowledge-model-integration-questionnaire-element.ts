@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { IntegrationReply, IntegrationReplyCodec } from '../data/integration-reply-data'
+import { ProjectData, ProjectDataCodec } from '../data/project-common-data'
 import { UserData } from '../data/user-data'
 import { ATTR, EVT } from '../protocol'
 import { JsonCodec } from '../utils'
@@ -10,6 +11,7 @@ export type KnowledgeModelIntegrationQuestionnaireComponentProps<S, U, P> = {
     settings: S
     userSettings: U
     user: UserData | null
+    project: ProjectData | null
     pluginIntegrationSettings: P | null
     integrationReply: IntegrationReply | null
     onReplyChange: (reply: IntegrationReply) => void
@@ -26,12 +28,18 @@ export abstract class KnowledgeModelIntegrationQuestionnaireElement<S, U, P> ext
     protected Component: KnowledgeModelIntegrationQuestionnaireComponent<S, U, P> | null = null
     protected pluginIntegrationSettings: P | null = null
     protected integrationReply: IntegrationReply | null = null
+    protected project: ProjectData | null = null
 
     abstract getReactComponent(): KnowledgeModelIntegrationQuestionnaireComponent<S, U, P>
     abstract getPluginIntegrationSettingsDataCodec(): JsonCodec<P>
 
     static get observedAttributes(): string[] {
-        return [...super.observedAttributes, ATTR.integrationReply, ATTR.pluginIntegrationSettings]
+        return [
+            ...super.observedAttributes,
+            ATTR.integrationReply,
+            ATTR.pluginIntegrationSettings,
+            ATTR.projectValue,
+        ]
     }
 
     protected onConnect(): void {
@@ -40,12 +48,14 @@ export abstract class KnowledgeModelIntegrationQuestionnaireElement<S, U, P> ext
 
         this.syncPluginIntegrationSettingsFromAttributes()
         this.syncIntegrationReplyFromAttributes()
+        this.syncProjectFromAttribute()
     }
 
     protected onAttributeChanged(name: string): void {
         super.onAttributeChanged(name)
 
         if (name === ATTR.integrationReply) this.syncIntegrationReplyFromAttributes()
+        if (name === ATTR.projectValue) this.syncProjectFromAttribute()
         if (name === ATTR.pluginIntegrationSettings)
             this.syncPluginIntegrationSettingsFromAttributes()
     }
@@ -78,6 +88,14 @@ export abstract class KnowledgeModelIntegrationQuestionnaireElement<S, U, P> ext
         return result.ok ? result.value : null
     }
 
+    protected syncProjectFromAttribute(): void {
+        const raw = this.getAttribute(ATTR.projectValue)
+        if (!raw || !raw.trim()) return
+
+        const result = ProjectDataCodec.decode(raw)
+        if (result.ok) this.project = result.value
+    }
+
     protected render(): void {
         const root = this.root
         const Component = this.Component
@@ -88,6 +106,7 @@ export abstract class KnowledgeModelIntegrationQuestionnaireElement<S, U, P> ext
                 settings: this.settings,
                 userSettings: this.userSettings,
                 user: this.user,
+                project: this.project,
                 pluginIntegrationSettings: this.pluginIntegrationSettings,
                 integrationReply: this.integrationReply,
                 onReplyChange: (next) => {

@@ -19,6 +19,8 @@ export const DocumentDataSchema = z.object({
     createdBy: z.uuid().nullable(),
     fileSize: z.int().nullable(),
     workerLog: z.string().nullable(),
+    // The workspace the document is in, which is its project's.
+    workspaceUuid: z.uuid(),
 })
 
 export type DocumentData = z.infer<typeof DocumentDataSchema>

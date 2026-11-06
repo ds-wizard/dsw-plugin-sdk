@@ -1,6 +1,7 @@
 export const ATTR = {
     documentValue: 'document-value',
     integrationReply: 'integration-reply-value',
+    knowledgeModelEditorValue: 'knowledge-model-editor-value',
     knowledgeModelValue: 'knowledge-model-value',
     pluginIntegrationSettings: 'plugin-integration-settings-value',
     projectValue: 'project-value',

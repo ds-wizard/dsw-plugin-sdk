@@ -5,8 +5,7 @@ import { makeJsonCodecSimple } from '../utils/json'
 export const DocumentTemplateInfoDataSchema = z.object({
     uuid: z.uuid(),
     name: z.string(),
-    organizationId: z.string(),
-    templateId: z.string(),
+    id: z.string(),
     version: z.string(),
 })
 

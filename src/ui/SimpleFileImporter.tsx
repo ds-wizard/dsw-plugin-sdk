@@ -1,137 +1,129 @@
-import { ChangeEvent, ReactNode, useId, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { KnowledgeModelData, ProjectImporterEvent } from '../data'
 import { ProjectImporter } from '../project-importer'
-import { FlashError } from './Flash'
+import { FileUpload } from './FileUpload'
+import { RootProps, rootProps } from './internal/root'
+import { Body, Title } from './Text'
+import { useUiWords } from './Words'
 
-type ReadAs = 'text' | 'arrayBuffer' | 'dataURL'
+export type ReadAs = 'text' | 'arrayBuffer' | 'dataURL'
 
-export type SimpleFileImporterProps<TParsed = unknown> = {
-    // SDK opinionated output
+export type SimpleFileImporterProps<TParsed = unknown> = RootProps & {
+    /** The importer's `onImport`: what the file became, for the wizard to continue with. */
     onImport: (events: ProjectImporterEvent[]) => void
-
-    // Optional context
+    /** The importer's `knowledgeModel`, handed to `importData`. */
     knowledgeModel?: KnowledgeModelData | null
 
-    // UI
+    /** The importer's title, an `h2`. */
     heading: ReactNode
-    label: ReactNode
+    /** The file field's label. */
+    label: string
+    /** A sentence under the heading: what file it takes, where to get it. */
     description?: ReactNode
 
-    // File handling
-    accept?: string // default application/json
-    readAs?: ReadAs // default text
+    /** What can be chosen, as the input's `accept`; `.json,application/json` unless told otherwise. */
+    accept?: string
+    /** How the file is read; as text unless told otherwise. */
+    readAs?: ReadAs
 
-    // Parsing + import mapping
-    parse?: (raw: string | ArrayBuffer) => TParsed // default JSON.parse(text)
+    /** The file's content into what `importData` works with; `JSON.parse` unless told otherwise. */
+    parse?: (raw: string | ArrayBuffer) => TParsed
+    /** Sets the replies the parsed file says, through the importer. */
     importData: (
         importer: ProjectImporter,
         parsed: TParsed,
         knowledgeModel: KnowledgeModelData | null,
     ) => void
 
-    // Errors
-    errorMessage?: ReactNode
-    formatError?: (err: unknown) => ReactNode
-
-    inputId?: string
+    /** Said under the field when the file cannot be read, parsed or imported. */
+    errorMessage?: string
+    /** The error in words, in place of `errorMessage`: what was wrong with the file. */
+    formatError?: (error: unknown) => string
 }
 
 function defaultJsonParse(raw: string | ArrayBuffer): unknown {
-    if (typeof raw !== 'string') {
-        throw new Error('Expected text content')
-    }
+    if (typeof raw !== 'string') throw new Error('Expected text content')
     return JSON.parse(raw)
 }
 
 function readFile(file: File, readAs: ReadAs): Promise<string | ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader()
-        reader.onerror = () => reject(reader.error ?? new Error('Failed to read file'))
-
+        reader.onerror = () => reject(reader.error ?? new Error('Failed to read the file'))
         reader.onload = () => {
             const result = reader.result
-            if (typeof result === 'string' || result instanceof ArrayBuffer) {
-                resolve(result)
-            } else {
-                reject(new Error('Unsupported file content'))
-            }
+            if (typeof result === 'string' || result instanceof ArrayBuffer) resolve(result)
+            else reject(new Error('Unsupported file content'))
         }
-
         if (readAs === 'text') reader.readAsText(file)
         else if (readAs === 'arrayBuffer') reader.readAsArrayBuffer(file)
         else reader.readAsDataURL(file)
     })
 }
 
+/**
+ * A whole project importer for a file: a heading, a sentence about the file,
+ * and a field to choose or drop it. The chosen file is read, parsed and
+ * turned into replies by `importData`, and the events go to the wizard; a file
+ * that cannot be is said under the field, and another can be chosen. The
+ * plugin writes only the parsing and the mapping:
+ *
+ *     <SimpleFileImporter
+ *         heading="Import from a DMP"
+ *         label="DMP file"
+ *         knowledgeModel={knowledgeModel}
+ *         onImport={onImport}
+ *         importData={(importer, dmp) => importer.setReply(titlePath, dmp.title)}
+ *     />
+ */
 export function SimpleFileImporter<TParsed = unknown>({
     onImport,
     knowledgeModel = null,
-
     heading,
     label,
     description,
-
-    accept = 'application/json',
+    accept = '.json,application/json',
     readAs = 'text',
-
     parse = defaultJsonParse as (raw: string | ArrayBuffer) => TParsed,
     importData,
-
-    errorMessage = 'Error reading or parsing file. Make sure you selected a valid document.',
+    errorMessage,
     formatError,
-    inputId,
+    ...props
 }: SimpleFileImporterProps<TParsed>) {
-    const autoId = useId()
-    const id = inputId ?? `simple-importer-${autoId}`
-    const [error, setError] = useState<ReactNode | null>(null)
+    const words = useUiWords()
+    const [file, setFile] = useState<File | null>(null)
+    const [error, setError] = useState<string | undefined>(undefined)
 
-    const onFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0]
-        if (!file) return
-
+    const onChange = async (chosen: File) => {
+        setFile(chosen)
+        setError(undefined)
         try {
-            const raw = await readFile(file, readAs)
-            const parsed = parse(raw)
-
+            const parsed = parse(await readFile(chosen, readAs))
             const importer = new ProjectImporter()
             importData(importer, parsed, knowledgeModel)
-
-            setError(null)
             onImport(importer.getEvents())
         } catch (err) {
-            setError(formatError ? formatError(err) : errorMessage)
-        } finally {
-            // Allow selecting the same file again
-            event.target.value = ''
+            setFile(null)
+            setError(formatError ? formatError(err) : (errorMessage ?? words.importFileError))
         }
     }
 
     return (
-        <div className="col col-detail mx-auto">
-            <div className="mb-3">
-                <h2>{heading}</h2>
-            </div>
-
-            <div className="mb-3">
-                {error && <FlashError>{error}</FlashError>}
-
-                <div className="form-group">
-                    <label htmlFor={id} className="form-label">
-                        {label}
-                    </label>
-
-                    <input
-                        type="file"
-                        id={id}
-                        accept={accept}
-                        className={`form-control${error ? ' is-invalid' : ''}`}
-                        onChange={onFileChange}
-                    />
-
-                    {description && <div className="mt-2 text-muted">{description}</div>}
-                </div>
-            </div>
+        <div {...rootProps(props, 'ui-stack')}>
+            <Title>{heading}</Title>
+            {description !== undefined && <Body>{description}</Body>}
+            <FileUpload
+                label={label}
+                file={file}
+                onChange={onChange}
+                onClear={() => {
+                    setFile(null)
+                    setError(undefined)
+                }}
+                accept={accept}
+                error={error}
+            />
         </div>
     )
 }
